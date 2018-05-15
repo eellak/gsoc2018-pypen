@@ -1,3 +1,7 @@
 *.pyc
 .idea
+**fb_credentials.txt
+**output.json
+**ghostdriver.log
+**.log
 __pycache__
