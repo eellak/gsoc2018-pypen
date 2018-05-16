@@ -5,7 +5,7 @@ the results, it will send it to the parser and then it will store the data for t
 
 import requests
 import json
-import copy
+import sys
 
 # custom modules import
 from fb_login import fb_login
@@ -14,19 +14,19 @@ from parser import parse
 
 
 class Gather():
-    def __init__(self, test: bool = False):
+    def __init__(self):
 
         self.session = requests.Session()
-        self.test = test
+        # set a browser-like user-agent header in order not to be considered a crawler
+        self.session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like '
+                                                   'Gecko) Chrome/65.0.3325.181 Safari/537.36'})
 
-        if self.test:
-            target = {"100026027770190": "https://www.facebook.com/100026027770190/about"}
-            self.CETS(target)
+    def logged_in(self):
+        return True if 'c_user' in self.session.cookies else False
 
-    def CETS(self, targets: dict = None):
+    def fb_login(self):
         """
-        Connect-Extract-Transform-Save
-        Gets as input a dict of target profiles IDs as keys and URLs as values, then executes login, request & parsing
+        FB login using the fb_login module
         """
         try:
             if not fb_login(self.session):
@@ -34,18 +34,24 @@ class Gather():
         except Exception as e:
             return None
 
-        self.session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like '
-                                                   'Gecko) Chrome/65.0.3325.181 Safari/537.36',
-                                     # 'accept-encoding': 'gzip, deflate, br',
-                                     # 'charset': 'utf-8',
-                                     # 'accept - language': 'el - GR, el;q = 0.9, cy;q = 0.8, en;q = 0.7',
-                                     # 'accept': '* / *',
-                                     # 'dnt': '1',
-                                     # 'cookie': 'datr=' + self.session.cookies._cookies['.facebook.com']['/']['datr'].value
-                                     #        + 'sb=' + self.session.cookies._cookies['.facebook.com']['/']['sb'].value
-                                     #        + 'xs=' + self.session.cookies._cookies['.facebook.com']['/']['xs'].value
-                                     })
+    def cets(self, targets_filename: str = None, test: bool = False):
+        """
+        Connect-Extract-Transform-Save
+        Gets as input a filename of a JSON file with target profiles IDs as keys and URLs as values, then executes login,
+        request & parsing
+        """
+        # demo
+        if test:
+            # Test users profiles
+            targets_filename = 'test_targets.json'
 
+        # targets file read
+        if targets_filename:
+            try:
+                targets = json.load(open(targets_filename, 'r'))
+            except Exception as e:
+                print(e)
+                return
 
         # the output dictionary, with profile IDs as keys and a list of words or phrases as values
         output = {}
@@ -56,12 +62,17 @@ class Gather():
             if type(targets[target]) is not list:
                 targets[target] = [targets[target]]
 
+            print("Retrieving and parsing HTML data for user with id "+target+"...")
             for url in targets[target]:
+                # get the HTML code
                 html_data = send_request(self.session, url)
-                extracted_data = parse(html_data)
+                # send the HTML code to the parser
+                extracted_data = parse(html_data, search_type='about' if 'about' in url else 'graph')
+                # extend the output with the information gathered
                 output[target].extend(extracted_data)
 
-        print(output)
+            print("Info gathering complete for user with id "+target)
+            print(output[target])
 
         # save output to a JSON file
         json_output = json.dumps(output)
@@ -72,5 +83,12 @@ class Gather():
 
 
 if __name__ == '__main__':
-    info = Gather(test=True)
-    info.CETS()
+    args = sys.argv
+    # enter '-test' while executing to run test scenario
+    test_arg = True if '-test' or '-TEST' in args else False
+
+    gatherer = Gather()
+
+    gatherer.fb_login()
+
+    gatherer.cets(test=test_arg) if gatherer.logged_in() else print('You need to log in Facebook first')
