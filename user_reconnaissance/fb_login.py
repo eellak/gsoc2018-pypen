@@ -16,7 +16,7 @@ def fb_login(session):
     """
 
     # fb_credentials.txt is ignored by source control (Git) and you can use it locally to save time by entering your fb
-    # email in the 1st row and your pass in the 2nd
+    # email in the 1st row and your pass in the 2nd or space separated
     if not os.path.exists('fb_credentials.txt'):
         # fb-use email
         email = input('Email: ')

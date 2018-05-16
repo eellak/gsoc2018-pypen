@@ -5,7 +5,7 @@ the results, it will send it to the parser and then it will store the data for t
 
 import requests
 import json
-import sys
+import argparse
 
 # custom modules import
 from fb_login import fb_login
@@ -83,12 +83,17 @@ class Gather():
 
 
 if __name__ == '__main__':
-    args = sys.argv
-    # enter '-test' while executing to run test scenario
-    test_arg = True if '-test' or '-TEST' in args else False
+    parser = argparse.ArgumentParser()
+
+    # enter '-test 1' while executing to run test scenario
+    parser.add_argument('-test', help='Run test scenario')
+    parser.add_argument('-file', help='Targets file (.json)')
+
+    args = parser.parse_args()
 
     gatherer = Gather()
 
     gatherer.fb_login()
 
-    gatherer.cets(test=test_arg) if gatherer.logged_in() else print('You need to log in Facebook first')
+    gatherer.cets(test=args.test, targets_filename=args.file) if gatherer.logged_in() \
+        else print('You need to log in Facebook first')

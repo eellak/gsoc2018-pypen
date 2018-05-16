@@ -1,6 +1,6 @@
 *.pyc
-.idea
-**fb_credentials.txt
-**output.json
+*.idea
+*fb_credentials.txt
+*output.json
 *.log
-__pycache__
+*__pycache__
