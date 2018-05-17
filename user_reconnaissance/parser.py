@@ -4,7 +4,24 @@ class names and the HTML code, whether it's about profile fields or search resul
 """
 
 from bs4 import BeautifulSoup
+import configparser
 
+config = configparser.ConfigParser()
+config.read('field_info.ini')
+
+def get_field(extracted_info, item, type, contents):
+    extracts = []
+    extracts.append(item.find(class_='_c24 _50f4').text)
+    if item.find(class_='_50f8 _2ieq'):
+        for sub_item in item.find_all(class_='_50f8 _2ieq'):
+            extracts.append(sub_item.find(class_='fsm fwn fcg').text)
+
+    for useless_text in contents:
+        for pos, extract in enumerate(extracts):
+            extracts[pos] = str(extract).replace(useless_text, '')
+
+
+    extracted_info[type] = extracts
 
 def parse(input_html_data: str, search_type: str=None):
     """
@@ -23,21 +40,28 @@ def parse(input_html_data: str, search_type: str=None):
 
     soup = BeautifulSoup(input_html_data, 'lxml')
 
-    extracted_info = []
+    extracted_info = {}
 
     if search_type == 'about':
         findings = soup.find_all(attrs={'class': ['_2nlw _2nlv', '_c24 _2ieq', '_6a _5u5j _6b']})
+
+        for item in findings:
+            if ' '.join(item.attrs['class']) == '_6a _5u5j _6b':
+                get_content = item.find(class_='_c24 _50f4')
+                if get_content:
+                    for field_type in config["FIELDS"]:
+                        if any(x in get_content.text for x in config["FIELDS"][field_type].split(',')[:-1]):
+                            get_field(extracted_info, item, field_type, config["FIELDS"][field_type].split(',')[:-1])
+            else:
+                if ' '.join(item.attrs['class']) == '_2nlw _2nlv':
+                    extracted_info['name'] = [item.text]
+                elif ' '.join(item.attrs['class']) == '_c24 _2ieq':
+                    extracted_info['birthday'] = [item.text.replace('Birthday', '')]
+                else:
+                    extracted_info['other']=[item.text]
+
     else:
         # all search results appear under the class '_32mo' so we just need to use find_all
-        findings = soup.find_all(class_='_32mo')
-
-    for item in findings:
-        if item.find(class_='_c24 _50f4'):
-            extracted_info.append(item.find(class_='_c24 _50f4').text)
-            if item.find(class_='_50f8 _2ieq'):
-                for sub_item in item.find_all(class_='_50f8 _2ieq'):
-                    extracted_info.append(sub_item.find(class_='fsm fwn fcg').text)
-        else:
-            extracted_info.append(item.text)
+        extracted_info['other - search results'] = [item.text for item in soup.find_all(class_='_32mo')]
 
     return extracted_info

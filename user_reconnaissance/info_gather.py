@@ -52,12 +52,15 @@ class Gather():
             except Exception as e:
                 print(e)
                 return
+        elif not test:
+            print('You have to define an input file "-file FILENAME"')
+            return
 
         # the output dictionary, with profile IDs as keys and a list of words or phrases as values
         output = {}
 
         for target in targets.keys():
-            output[target] = []
+            output[target] = {}
             # make sure value fields are lists
             if type(targets[target]) is not list:
                 targets[target] = [targets[target]]
@@ -69,13 +72,13 @@ class Gather():
                 # send the HTML code to the parser
                 extracted_data = parse(html_data, search_type='about' if 'about' in url else 'graph')
                 # extend the output with the information gathered
-                output[target].extend(extracted_data)
+                output[target].update(extracted_data)
 
             print("Info gathering complete for user with id "+target)
             print(output[target])
 
         # save output to a JSON file
-        json_output = json.dumps(output)
+        json_output = json.dumps(output, ensure_ascii=False)
         f = open("output.json", "w")
         f.write(json_output)
         f.close()
