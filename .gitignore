@@ -3,4 +3,5 @@
 *fb_credentials.txt
 *output.json
 *.log
+*_wordlist.txt
 *__pycache__

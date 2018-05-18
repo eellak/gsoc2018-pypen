@@ -11,15 +11,20 @@ import argparse
 from fb_login import fb_login
 from send_req import send_request
 from parser import parse
+import configparser
 
+config = configparser.ConfigParser()
+config.read('data.ini')
 
-class Gather():
+class Extractor():
     def __init__(self):
 
         self.session = requests.Session()
         # set a browser-like user-agent header in order not to be considered a crawler
         self.session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like '
                                                    'Gecko) Chrome/65.0.3325.181 Safari/537.36'})
+        # the output dictionary, with profile IDs as keys and a list of words or phrases as values
+        self.output = {}
 
     def logged_in(self):
         return True if 'c_user' in self.session.cookies else False
@@ -40,49 +45,57 @@ class Gather():
         Gets as input a filename of a JSON file with target profiles IDs as keys and URLs as values, then executes login,
         request & parsing
         """
-        # demo
-        if test:
-            # Test users profiles
-            targets_filename = 'test_targets.json'
+        if self.logged_in():
+            # demo
+            if test:
+                # Test users profiles
+                targets_filename = config['IO']['test']
 
-        # targets file read
-        if targets_filename:
-            try:
-                targets = json.load(open(targets_filename, 'r'))
-            except Exception as e:
-                print(e)
+            # targets file read
+            if targets_filename:
+                try:
+                    targets = json.load(open(targets_filename, 'r'))
+                except Exception as e:
+                    print(e)
+                    return
+
+            elif not test:
+                print('You have to define an input file "-file FILENAME"')
                 return
-        elif not test:
-            print('You have to define an input file "-file FILENAME"')
+
+            for target in targets.keys():
+                self.output[target] = {}
+                # make sure value fields are lists
+                if type(targets[target]) is not list:
+                    targets[target] = [targets[target]]
+
+                print("Retrieving and parsing HTML data for user with id "+target+"...")
+                for url in targets[target]:
+                    # get the HTML code
+                    html_data = send_request(self.session, url)
+                    # send the HTML code to the parser
+                    extracted_data = parse(html_data, search_type='about' if 'about' in url else 'graph')
+                    # extend the output with the information gathered
+                    self.output[target].update(extracted_data)
+
+                print("Info gathering complete for user with id "+target)
+                print(self.output[target])
+
+        else:
+            print('You need to log in Facebook first')
             return
 
-        # the output dictionary, with profile IDs as keys and a list of words or phrases as values
-        output = {}
-
-        for target in targets.keys():
-            output[target] = {}
-            # make sure value fields are lists
-            if type(targets[target]) is not list:
-                targets[target] = [targets[target]]
-
-            print("Retrieving and parsing HTML data for user with id "+target+"...")
-            for url in targets[target]:
-                # get the HTML code
-                html_data = send_request(self.session, url)
-                # send the HTML code to the parser
-                extracted_data = parse(html_data, search_type='about' if 'about' in url else 'graph')
-                # extend the output with the information gathered
-                output[target].update(extracted_data)
-
-            print("Info gathering complete for user with id "+target)
-            print(output[target])
-
+    def save(self):
         # save output to a JSON file
-        json_output = json.dumps(output, ensure_ascii=False)
-        f = open("output.json", "w")
-        f.write(json_output)
-        f.close()
-        return
+        if self.output:
+            json_output = json.dumps(self.output, ensure_ascii=False)
+            f = open(config['IO']['output'], "w")
+            f.write(json_output)
+            f.close()
+            return
+        else:
+            print('No info has been gathered, output is empty - Nothing to save here')
+            return
 
 
 if __name__ == '__main__':
@@ -94,9 +107,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    gatherer = Gather()
+    extractor = Extractor()
 
-    gatherer.fb_login()
+    extractor.fb_login()
 
-    gatherer.cets(test=args.test, targets_filename=args.file) if gatherer.logged_in() \
-        else print('You need to log in Facebook first')
+    extractor.cets(test=args.test, targets_filename=args.file)
+
+    extractor.save()
+

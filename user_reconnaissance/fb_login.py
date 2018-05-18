@@ -6,6 +6,10 @@ Code partly borrowed & modified from https://gist.github.com/UndergroundLabs/fad
 
 import getpass
 import os
+import configparser
+
+config = configparser.ConfigParser()
+config.read('data.ini')
 
 def fb_login(session):
     """
@@ -17,19 +21,19 @@ def fb_login(session):
 
     # fb_credentials.txt is ignored by source control (Git) and you can use it locally to save time by entering your fb
     # email in the 1st row and your pass in the 2nd or space separated
-    if not os.path.exists('fb_credentials.txt'):
+    if not os.path.exists(config['CREDS']['fb']):
         # fb-use email
         email = input('Email: ')
         # password = input('Password: ')
         password = getpass.getpass('Password: ')
     else:
-        email, password = open('fb_credentials.txt', 'r').read().split('\n')
+        email, password = open(config['CREDS']['fb'], 'r').read().split('\n')
 
     # Navigate to Facebook's homepage to load Facebook's cookies.
-    response = session.get('https://m.facebook.com')
+    response = session.get(config['URLS']['fb_home'])
 
     # Attempt to login to Facebook
-    response = session.post('https://m.facebook.com/login.php', data={
+    response = session.post(config['URLS']['fb_login'], data={
         'email': email,
         'pass': password
     }, allow_redirects=False)

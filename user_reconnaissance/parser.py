@@ -6,8 +6,8 @@ class names and the HTML code, whether it's about profile fields or search resul
 from bs4 import BeautifulSoup
 import configparser
 
-config = configparser.ConfigParser()
-config.read('field_info.ini')
+fields_data = configparser.ConfigParser()
+fields_data.read('data.ini')
 
 def get_field(extracted_info, item, type, contents):
     extracts = []
@@ -49,9 +49,9 @@ def parse(input_html_data: str, search_type: str=None):
             if ' '.join(item.attrs['class']) == '_6a _5u5j _6b':
                 get_content = item.find(class_='_c24 _50f4')
                 if get_content:
-                    for field_type in config["FIELDS"]:
-                        if any(x in get_content.text for x in config["FIELDS"][field_type].split(',')[:-1]):
-                            get_field(extracted_info, item, field_type, config["FIELDS"][field_type].split(',')[:-1])
+                    for field_type in fields_data["FIELDS"]:
+                        if any(x in get_content.text for x in fields_data["FIELDS"][field_type].split(',')[:-1]):
+                            get_field(extracted_info, item, field_type, fields_data["FIELDS"][field_type].split(',')[:-1])
             else:
                 if ' '.join(item.attrs['class']) == '_2nlw _2nlv':
                     extracted_info['name'] = [item.text]
