@@ -1,7 +1,9 @@
 *.pyc
 *.idea
-*fb_credentials.txt
-*output.json
+*.txt
+*.json
 *.log
-*_wordlist.txt
+*.lst
 *__pycache__
+!requirements.txt
+!test_targets.json
