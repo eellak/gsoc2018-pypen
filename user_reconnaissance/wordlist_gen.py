@@ -98,5 +98,5 @@ def generate():
         out_file = open('results/' + user + '_wordlist.lst', 'w')
         out_file.writelines([item+'\n' for item in wordlist])
 
-        return in_data.keys()
+    return in_data.keys()
 

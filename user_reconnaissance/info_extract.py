@@ -48,7 +48,7 @@ class Extractor():
             # demo
             if test:
                 # Test users profiles
-                targets_filename = config['IO']['test']
+                targets_filename = config['IO']['test_targets']
 
             # targets file read
             if targets_filename:
@@ -56,11 +56,11 @@ class Extractor():
                     targets = json.load(open(targets_filename, 'r'))
                 except Exception as e:
                     print(e)
-                    return
+                    return None
 
             elif not test:
                 print('You have to define an input file "-file FILENAME"')
-                return
+                return None
 
             for target in targets.keys():
                 self.output[target] = {}
@@ -78,11 +78,11 @@ class Extractor():
                     self.output[target].update(extracted_data)
 
                 print("Info gathering complete for user with id "+target)
-                print(self.output[target])
+                print(json.dumps(self.output[target], indent=3, sort_keys=True))
 
         else:
             print('You need to log in Facebook first')
-            return
+            return None
 
     def save(self):
         # save output to a JSON file
@@ -91,8 +91,8 @@ class Extractor():
             f = open(config['IO']['output'], "w")
             f.write(json_output)
             f.close()
-            return
+            return None
         else:
             print('No info has been gathered, output is empty - Nothing to save here')
-            return
+            return None
 
