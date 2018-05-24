@@ -15,9 +15,9 @@ import configparser
 config = configparser.ConfigParser()
 config.read('data.ini')
 
-class Extractor():
-    def __init__(self):
 
+class Extractor:
+    def __init__(self):
         self.session = requests.Session()
         # set a browser-like user-agent header in order not to be considered a crawler
         self.session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like '
@@ -38,10 +38,9 @@ class Extractor():
         except Exception as e:
             return None
 
-    def cets(self, targets_filename: str = None, test: bool = False):
+    def extract(self, targets_filename: str = None, test: bool = False):
         """
-        Connect-Extract-Transform-Save
-        Gets as input a filename of a JSON file with target profiles IDs as keys and URLs as values, then executes login,
+        Gets as input a filename of a JSON file with target profiles IDs as keys and URLs as values, then executes
         request & parsing
         """
         if self.logged_in():

@@ -19,7 +19,7 @@ fields_map = config['FIELDS_MAP']
 # regular expression for date detections, details following below
 date_pattern = re.compile(r'^[a-zA-Z]{3,8}\s[0-9]{1,2}\,\s[0-9]{4}$')
 
-def generate():
+def generate_words():
     in_file = open(config['IO']['extracted_data'], 'r')
     in_data = json.load(in_file)
 
@@ -93,6 +93,7 @@ def generate():
         for item in to_append:
             wordlist.append(''.join(item).lower())
 
+        # wordlist results can be found in the 'results' folder
         if not os.path.exists('results'):
             os.makedirs('results')
         out_file = open('results/' + user + '_wordlist.lst', 'w')
