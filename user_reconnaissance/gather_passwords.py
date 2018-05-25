@@ -11,7 +11,7 @@ config = configparser.ConfigParser()
 config.read('data.ini')
 
 test = True
-rules = 'Custom'
+rules = 'CustomHeavy'
 
 try:
     pass_list = json.load(open(config['IO']['pass_list'] if not test else config['IO']['test_passwords'], 'r'))

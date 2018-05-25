@@ -19,6 +19,25 @@ fields_map = config['FIELDS_MAP']
 # regular expression for date detections, details following below
 date_pattern = re.compile(r'^[a-zA-Z]{3,8}\s[0-9]{1,2}\,\s[0-9]{4}$')
 
+# add splash_data_100_worst_passwords_2k17.txt to wordlist as a solid general base for our cracking procedure
+worst_pass_list = [word.strip('\n') for word in open(config['IO']['worst_pass'], 'r').readlines()]
+
+def add_words():
+    # prompt for addition of platform/company specific keywords
+    prompt = input("Are there any specific words you'd like to add for the dictionary attack? (recommended) [Y/n]: ")
+    if 'y' or 'Y' or '' == prompt:
+        while True:
+            word = input("Enter word (simply press 'Enter' if you're done): ")
+            if word:
+                worst_pass_list.append(word)
+            else:
+                break
+    else:
+        pass
+
+    return None
+
+
 def generate_words():
     in_file = open(config['IO']['extracted_data'], 'r')
     in_data = json.load(in_file)
@@ -89,6 +108,13 @@ def generate_words():
                                                                in_data[user][fields_map['bday']], 2))
                 to_append.extend(combinations_with_replacement(in_data[user][fields_map['name']] +
                                                                in_data[user][fields_map['bday']], 3))
+
+        # extend wordlist with splash_data_100_worst_passwords_2k17.txt
+        wordlist.extend(worst_pass_list)
+
+        # extra combinations based on specific words and 100 worst passwords
+        extra_combos = list(combinations_with_replacement(worst_pass_list + wordlist, 2))
+        to_append.extend(extra_combos)
 
         for item in to_append:
             wordlist.append(''.join(item).lower())

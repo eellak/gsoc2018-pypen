@@ -9,7 +9,7 @@ import configparser
 
 # custom modules import
 from info_extract import Extractor
-from wordlist_gen import generate_words
+from wordlist_gen import generate_words, add_words
 from summon_john import crack
 
 config = configparser.ConfigParser()
@@ -35,6 +35,8 @@ if __name__ == '__main__':
     extractor.extract(test=args.test, targets_filename=args.file)
 
     extractor.save()
+
+    add_words()
 
     users_list = generate_words()
 
