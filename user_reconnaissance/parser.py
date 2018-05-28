@@ -5,6 +5,7 @@ class names and the HTML code, whether it's about profile fields or search resul
 
 from bs4 import BeautifulSoup
 import configparser
+import json
 
 fields_data = configparser.ConfigParser()
 fields_data.read('data.ini')
@@ -28,7 +29,7 @@ def parse(input_html_data: str, search_type: str=None):
     Depending on the search type, in_profile of graph_search, this function will extract as many information as
     possible, out of those that are of our interest
 
-    -Search results such as Pages or Friends names can be found inside of <div class=”_32mo”><span></span></div>
+    -Search results such as Users, Pages or Friends names can be found inside of <div class=”_32mo”><span></span></div>
     -Profile info (about):
         Birthday: <span class="_c24 _2ieq"><div><div></div><span class="accessible_elem">Birthday</span></div></span>
         Information (city, workplace etc) parent divs: <div class="_6a _5u5j _6b"></div>
@@ -36,6 +37,7 @@ def parse(input_html_data: str, search_type: str=None):
         we’re interested in may be followed by phrases like “Lives in” or “Married to”.
         Extra info like Homeplace or marriage date: <div class="_50f8 _2ieq"><div class="fsm fwn fcg"></div></div>
         Name: <a class="_2nlw _2nlv"></a>
+    -Get profile id: Find elements with div class="_3u1 _gli _uvb" and get "id" field from their JSON value
     """
 
     soup = BeautifulSoup(input_html_data, 'lxml')
@@ -60,8 +62,14 @@ def parse(input_html_data: str, search_type: str=None):
                 else:
                     extracted_info['other']=[item.text]
 
-    else:
+    elif search_type == 'graph':
         # all search results appear under the class '_32mo' so we just need to use find_all
         extracted_info['other - search results'] = [item.text for item in soup.find_all(class_='_32mo')]
+
+    else:
+        # users search
+        users = soup.find_all(class_='_3u1 _gli _uvb')
+        for user in users:
+            extracted_info.update({str(json.loads(user.attrs['data-bt'])['id'])+'\n' : None})
 
     return extracted_info

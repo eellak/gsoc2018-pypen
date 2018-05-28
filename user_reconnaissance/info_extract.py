@@ -25,6 +25,8 @@ class Extractor:
         # the output dictionary, with profile IDs as keys and a list of words or phrases as values
         self.output = {}
 
+        self.users = []
+
     def logged_in(self):
         return True if 'c_user' in self.session.cookies else False
 
@@ -38,7 +40,7 @@ class Extractor:
         except Exception as e:
             return None
 
-    def extract(self, targets_filename: str = None, test: bool = False):
+    def extract(self, targets_filename: str = None, test: bool = False, pageid: str = None):
         """
         Gets as input a filename of a JSON file with target profiles IDs as keys and URLs as values, then executes
         request & parsing
@@ -57,7 +59,20 @@ class Extractor:
                     print(e)
                     return None
 
-            elif not test:
+            # get_users case
+            # if pageid is defined, then we will execute a Facebook graph search to retrieve users associated to that
+            # page
+            elif pageid:
+                # form the correct urls for user retrieval
+                url = config['URLS']['get_users'].replace('PAGE_ID', pageid)
+
+                html_data = send_request(self.session, config, url)
+
+                self.users = parse(html_data, search_type='graph-users').keys()
+
+                return None
+
+            else:
                 print('You have to define an input file "-file FILENAME"')
                 return None
 
@@ -70,7 +85,7 @@ class Extractor:
                 print("Retrieving and parsing HTML data for user with id "+target+"...")
                 for url in targets[target]:
                     # get the HTML code
-                    html_data = send_request(self.session, url)
+                    html_data = send_request(self.session, config, url)
                     # send the HTML code to the parser
                     extracted_data = parse(html_data, search_type='about' if 'about' in url else 'graph')
                     # extend the output with the information gathered
@@ -83,15 +98,24 @@ class Extractor:
             print('You need to log in Facebook first')
             return None
 
-    def save(self):
+    def save(self, pageid: str = None):
+        # save users list to pageid_users_list.txt file
+        if pageid and self.users:
+            users_file = open(pageid + '_users_list.txt', 'w')
+            users_file.writelines(self.users)
+            users_file.close()
+            print(str(len(self.users))+ ' user profiles found & saved (IDs)')
+
         # save output to a JSON file
-        if self.output:
+        elif self.output and not pageid:
             json_output = json.dumps(self.output, ensure_ascii=False)
             f = open(config['IO']['output'], "w")
             f.write(json_output)
             f.close()
-            return None
+
         else:
             print('No info has been gathered, output is empty - Nothing to save here')
-            return None
+
+        return None
+
 

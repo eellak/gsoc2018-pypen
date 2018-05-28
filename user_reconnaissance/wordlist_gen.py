@@ -70,7 +70,7 @@ def generate_words():
                 in_data[user][field].extend(entries_to_add)
 
         # step2: break down to words
-        def flatten(nested_list):
+        def flatten(nested_list: list):
             return list(set(itertools.chain.from_iterable(nested_list)))
 
         for field in in_data[user]:

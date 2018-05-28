@@ -7,7 +7,7 @@ from subprocess import run, PIPE
 import hashlib
 
 
-def crack(users_list, test, hash_type, rules, config):
+def crack(users_list: list, test: bool, hash_type: str, rules:str, config):
     """
     After getting a list of user passwords for a user defined file (filename found in data.ini['IO']['pass_list']), we
     call John The Ripper from the command line (subprocess.run) while defining various JtR options, such as the
