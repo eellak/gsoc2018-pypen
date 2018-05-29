@@ -23,17 +23,25 @@ date_pattern = re.compile(r'^[a-zA-Z]{3,8}\s[0-9]{1,2}\,\s[0-9]{4}$')
 worst_pass_list = [word.strip('\n') for word in open(config['IO']['worst_pass'], 'r').readlines()]
 
 def add_words():
-    # prompt for addition of platform/company specific keywords
-    prompt = input("Are there any specific words you'd like to add for the dictionary attack? (recommended) [Y/n]: ")
-    if 'y' or 'Y' or '' == prompt:
-        while True:
-            word = input("Enter word (simply press 'Enter' if you're done): ")
-            if word:
-                worst_pass_list.append(word)
-            else:
-                break
+    if os.path.exists(config['IO']['extras']):
+        try:
+            worst_pass_list.extend([word.strip('\n') for word in open(config['IO']['extras'], 'r').readlines()])
+            print('Additional words successfully read from file')
+        except Exception as e:
+            print(e)
+
     else:
-        pass
+        # prompt for addition of platform/company specific keywords
+        prompt = input("Are there any specific words you'd like to add for the dictionary attack? (recommended) [Y/n]: ")
+        if 'y' or 'Y' or '' == prompt:
+            while True:
+                word = input("Enter word (simply press 'Enter' if you're done): ")
+                if word:
+                    worst_pass_list.append(word)
+                else:
+                    break
+        else:
+            pass
 
     return None
 

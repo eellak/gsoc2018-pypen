@@ -70,6 +70,9 @@ def parse(input_html_data: str, search_type: str=None):
         # users search
         users = soup.find_all(class_='_3u1 _gli _uvb')
         for user in users:
-            extracted_info.update({str(json.loads(user.attrs['data-bt'])['id'])+'\n' : None})
+            extracted_info.update({user.find(class_='_32mo').text
+                                   + ' : '
+                                   + str(json.loads(user.attrs['data-bt'])['id'])
+                                   +'\n' : None})
 
     return extracted_info

@@ -101,7 +101,7 @@ class Extractor:
     def save(self, pageid: str = None):
         # save users list to pageid_users_list.txt file
         if pageid and self.users:
-            users_file = open(pageid + '_users_list.txt', 'w')
+            users_file = open(pageid + config['IO']['users_output'], 'w')
             users_file.writelines(self.users)
             users_file.close()
             print(str(len(self.users))+ ' user profiles found & saved (IDs)')
