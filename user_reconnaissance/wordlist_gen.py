@@ -1,7 +1,7 @@
 """
 This module is responsible for creating a input wordlist for our dictionary attacks with JtR. This is done by
 combining the words from particular word groups that have a good likelihood of forming a password (like "name"
-and "birthday"). Phrases are broken down to words, dates written in full are tranformed to numeric form.
+and "birthday"). Phrases are broken down to words, dates written in full are transformed to numeric form.
 """
 from itertools import combinations_with_replacement
 import json
