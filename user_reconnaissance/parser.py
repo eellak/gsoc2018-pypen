@@ -70,9 +70,14 @@ def parse(input_html_data: str, search_type: str=None):
         # users search
         users = soup.find_all(class_='_3u1 _gli _uvb')
         for user in users:
+            # prepare the dict to be used as a proper target JSON file
             extracted_info.update({user.find(class_='_32mo').text
                                    + ' : '
                                    + str(json.loads(user.attrs['data-bt'])['id'])
-                                   +'\n' : None})
+                                   +'\n' : [fields_data['URLS']['about']
+                                                    .replace('USER_ID', str(json.loads(user.attrs['data-bt'])['id'])),
+                                            fields_data['URLS']['pages_liked']
+                                                    .replace('USER_ID', str(json.loads(user.attrs['data-bt'])['id']))]
+                                   })
 
     return extracted_info

@@ -5,7 +5,6 @@ This module is responsible for executing the requests for Facebook search or pro
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
-import sys
 
 def send_request(session, config, url: list=None):
     """
@@ -44,9 +43,29 @@ def send_request(session, config, url: list=None):
 
         dots_count = 1
 
+        # if it's a search for employees, ask whether the user wants to limit the number of results
+        if url.endswith('/employees/present'):
+            limit = None
+            prompt = input(
+                "Would you like to limit the number of results? (enter the number you want or just press enter to get "
+                "all results available): ")
+
+            if prompt.isdigit():
+                limit = int(prompt)
+
+            else:
+                pass
+
+
         while True:
-            print("Loading contents{0}   \r".format('.'*dots_count), end="\r", flush=True)
+            print("Loading contents{0}   \r".format('.' * dots_count), end="\r", flush=True)
             dots_count += 1
+
+            # Check results if it's a search for employees
+            if url.endswith('/employees/present') and limit:
+                num_of_results = len(driver.find_elements_by_class_name("_32mo"))
+                if num_of_results >= limit:
+                    break
 
             # Scroll down to bottom
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")

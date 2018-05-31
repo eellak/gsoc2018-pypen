@@ -68,7 +68,7 @@ class Extractor:
 
                 html_data = send_request(self.session, config, url)
 
-                self.users = parse(html_data, search_type='graph-users').keys()
+                self.users = parse(html_data, search_type='graph-users')
 
                 return None
 
@@ -102,9 +102,18 @@ class Extractor:
         # save users list to pageid_users_list.txt file
         if pageid and self.users:
             users_file = open(pageid + config['IO']['users_output'], 'w')
-            users_file.writelines(self.users)
+            users_file.writelines(self.users.keys())
             users_file.close()
-            print(str(len(self.users))+ ' user profiles found & saved (IDs)')
+
+            # form proper target JSON file with the employees that were extracted
+            output_dict = {}
+            for key, val in self.users.items():
+                output_dict[key.split(':')[1].strip('\n').strip(' ')] = val
+
+            target_file = open(pageid + config['IO']['target_file'], 'w')
+            json.dump(output_dict, target_file)
+
+            print(str(len(self.users))+ ' user profiles found & saved (IDs) and targets JSON created')
 
         # save output to a JSON file
         elif self.output and not pageid:
