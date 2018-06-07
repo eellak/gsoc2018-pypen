@@ -17,12 +17,12 @@ def get_procs(verbose=False):
     :return processes: list, processes with the following fields: 'pid', 'name', 'username'
     """
 
-    processes = psutil.process_iter(attrs=['pid', 'name', 'username'])
+    processes = list(psutil.process_iter(attrs=['pid', 'name', 'username']))
 
     if verbose:
         print(processes)
 
-    return processes
+    return {proc.info['pid']: [proc.info['name'], proc.info['username']] for proc in processes}
 
 
 def port_state(host, port, verbose=False):
@@ -199,8 +199,3 @@ def pipe_info(pid, verbose=False):
         print(json.dumps(output, indent=3, sort_keys=True))
 
     return output
-
-
-if __name__ == "__main__":
-    # test a function here
-    exit()
