@@ -1,5 +1,5 @@
 """
-
+This modules runs various information gathering functions for  a target system
 """
 
 import json
@@ -24,19 +24,23 @@ def save(data, fname):
 
         return None
 
+
 if __name__ == "__main__":
     print('Target Reconnaissance')
 
     host, port, ext, directory = None, None, None, None
 
-    if not (params['FIELDS']['host'] or params['FIELDS']['ext']):
+    # if target host address and other needed info is not provided in the params.ini file (which is the recommended way
+    # of using this module), it needs to be entered via command prompt
+    if not params['FIELDS']['host'] or not params['FIELDS']['ext']:
         print('Parameters file not configured, enter target info below')
         host = input('Enter target host address: ')
         port = input('Enter target port (optional): ')
         ext = input('Enter extension of file types to get info about: ')
         directory = input('Enter directory for files search (optional): ')
 
-        if host or ext is None:
+        # host and file extension info are necessary for this module to run
+        if not host or not ext:
             print('Insufficient target info provided. Exiting...')
             exit()
 
@@ -44,35 +48,43 @@ if __name__ == "__main__":
         host, port, ext, directory = params['FIELDS'].values()
         print('Parameters file configured\nTarget scan initiated')
 
-        # process scan
-        processes = get_procs()
-        if save(processes, params['IO']['processes']):
-            print('processes scan ok')
-        else:
-            print('processes scan failed')
+    if not os.path.exists(params['IO']['results']):
+        os.makedirs(params['IO']['results'])
 
-        # os info
-        if save(os_info(host), params['IO']['os']):
-            print('os scan ok')
-        else:
-            print('os scan failed')
+    # process scan
+    processes = get_procs()
+    if save(processes, params['IO']['processes']):
+        print('processes scan ok')
 
-        # socket info
-        if save(socket_info(host, port), params['IO']['sockets']):
-            print('sockets scan ok')
-        else:
-            print('sockets scan failed')
+    else:
+        print('processes scan failed')
 
-        # files info
-        if save(file_info(ext, directory), params['IO']['files']):
-            print('files scan ok')
-        else:
-            print('files scan failed')
+    # os info
+    if save(os_info(host), params['IO']['results'] + params['IO']['os']):
+        print('os scan ok')
 
-        # pipe info per process
-        if not os.path.exists('pipes_info'):
-            os.makedirs('pipes_info')
+    else:
+        print('os scan failed')
 
-        for proc in processes.keys():
-            fname = 'proccess_info/process' + str(proc) + '.json'
-            save(pipe_info(proc, port), fname)
+    # socket info
+    if save(socket_info(host, port), params['IO']['results'] + params['IO']['sockets']):
+        print('sockets scan ok')
+
+    else:
+        print('sockets scan failed')
+
+    # files info
+    if save(file_info(ext, directory), params['IO']['results'] + params['IO']['files']):
+        print('files scan ok')
+
+    else:
+        print('files scan failed')
+
+    # pipe info per process
+    print('Pipe information gathering started, this will take some time...')
+    if not os.path.exists(params['IO']['results'] + params['IO']['pipes_results']):
+        os.makedirs(params['IO']['results'] + params['IO']['pipes_results'])
+
+    for proc in processes.keys():
+        fname = params['IO']['pipes_results'] + 'process' + str(proc) + '.json'
+        save(pipe_info(proc, port), params['IO']['results'] + fname)
