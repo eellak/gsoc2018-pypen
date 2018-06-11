@@ -164,7 +164,7 @@ def file_info(ext, directory=None, verbose=False):
     return files_stat
 
 
-def pipe_info(pid, verbose=False):
+def pipe_info(pid=None, verbose=False):
     """
     :param pid: str or int, process id
     :param verbose: print results
@@ -174,7 +174,9 @@ def pipe_info(pid, verbose=False):
     result = run('lsof',
                  stdout=PIPE)
 
-    result = run(['grep', str(pid)],
+    # if pid is defined, find pipes for this specific process, otherwise find all pipes
+    if pid:
+        result = run(['grep', str(pid)],
                  input=result.stdout,
                  stdout=PIPE)
 
