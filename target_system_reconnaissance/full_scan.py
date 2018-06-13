@@ -25,7 +25,8 @@ def save(data, fname):
         return None
 
 
-if __name__ == "__main__":
+def main():
+
     print('Target Reconnaissance')
 
     host, port, ext, directory = None, None, None, None
@@ -88,3 +89,8 @@ if __name__ == "__main__":
     for proc in processes.keys():
         fname = params['IO']['pipes_results'] + 'process' + str(proc) + '.json'
         save(pipe_info(proc, port), params['IO']['results'] + fname)
+
+
+if __name__ == "__main__":
+    main()
+
