@@ -15,19 +15,21 @@ def bytes_to_int(bytes):
 
 
 def retrieve(HOST, PORT):
-    s = socket.socket()
-    s.connect((HOST, PORT))
-
-    for root, dirs, files in os.walk('/results'):
+    for root, dirs, files in os.walk('results_info'):
         for file in files:
+            s = socket.socket()
+            s.connect((HOST, PORT))
+            f_read = None
             with open(os.path.join(root, file), "rb") as send_file:
-                s.sendall(file)
-                s.sendall(send_file)
+                s.send(bytearray(file, encoding='utf-8'))
+                f_read = send_file.read(1024)
 
-    while True:
-        data = bytes_to_int(s.recv(1024))
-        data += 1
-        s.sendall(bytes([data]))
+                while len(f_read):
+                    s.send(f_read)
+                    f_read = send_file.read(1024)
+                s.close()
+
+
 
 
 if __name__ == '__main__':
@@ -39,6 +41,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    full_scan
+    full_scan.main()
 
     retrieve(args.server, int(args.port))
