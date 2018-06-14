@@ -2,25 +2,25 @@ import socket
 import argparse
 
 
-def receive(HOST = '192.168.1.215', PORT=1337):
+def receive(HOST ='localhost', PORT=1337):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
-    s.listen(10)
+    s.listen(10000)
     print('Server listening on port {}...'.format(PORT))
 
-    conn, _ = s.accept()
-
     while True:
-        in_data = conn.recv(1024)
-        if 'EOF' in str(in_data.decode('utf-8')):
-            in_data = bytearray(str(in_data.decode('utf-8')).rsplit('EOF')[1], encoding='utf-8')
-        if str(in_data.decode('utf-8')).endswith('.json'):
-            out_file = open(str(in_data.decode('utf-8')), 'wb')
+        conn, _ = s.accept()
 
-        while in_data:
+        in_data = conn.recv(1024)
+        if '.json' in str(in_data.decode('utf-8')):
+            out_file = open(str(in_data.decode('utf-8')).split('.json')[0] + '.json', 'wb')
+            in_data = bytearray(str(in_data.decode('utf-8')).split('.json')[1], encoding='utf-8')
+
+        while len(in_data):
+            print(str(in_data.decode('utf-8')))
             out_file.write(in_data)
             in_data = conn.recv(1024)
-            out_file.write(in_data)
+        out_file.close()
 
 
 
