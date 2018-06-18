@@ -14,7 +14,7 @@ See [Projects](https://github.com/eellak/gsoc2018-pypen/projects/1) tab
 
 ### Mentors
 
-* [Antonios Andreatos](https://haf.academia.edu/AntoniosAndreatos)
+* [Antonios Andreatos](https://www.researchgate.net/profile/Antonios_Andreatos)
 * [Panagiotis Karampelas](https://www.linkedin.com/in/panagiotis-karampelas-5868002/)
 * [Christos Pavlatos](http://www.cslab.ece.ntua.gr/~pavlatos/)
 
