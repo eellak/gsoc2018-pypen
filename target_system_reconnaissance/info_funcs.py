@@ -107,25 +107,28 @@ def socket_info(host, port=None, verbose=False):
     :return: JSON (dict) object, including the following info: family, type, proto, canonname, sockaddr
     """
 
-    result = {}
+    # WRONG IMPLEMENTATION
+    # TODO: ommit or change (since NMAP can give us ports open for TCP conns)
 
-    try:
-        for res in socket.getaddrinfo(host, port):
-            result[len(result)] = {k: v for k, v in zip(['family',
-                                                         'type',
-                                                         'proto',
-                                                         'canonname',
-
-                                                         'sockaddr'], res)}
-        if verbose:
-            print(json.dumps(result, indent=3, sort_keys=True))
-
-        return result
-
-    except socket.gaierror:
-        print('Host ' + host + ' not found')
-
-        return None
+    # result = {}
+    #
+    # try:
+    #     for res in socket.getaddrinfo(host, port):
+    #         result[len(result)] = {k: v for k, v in zip(['family',
+    #                                                      'type',
+    #                                                      'proto',
+    #                                                      'canonname',
+    #
+    #                                                      'sockaddr'], res)}
+    #     if verbose:
+    #         print(json.dumps(result, indent=3, sort_keys=True))
+    #
+    #     return result
+    #
+    # except socket.gaierror:
+    #     print('Host ' + host + ' not found')
+    #
+    #     return None
 
 
 def file_info(ext, directory=None, verbose=False):

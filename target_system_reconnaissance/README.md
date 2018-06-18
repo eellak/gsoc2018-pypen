@@ -6,8 +6,11 @@ A set of functions have been developed in order to get useful information for a 
 
 ### Setup
 
-The only requirement is to install the necessary python packages through executing  
+You will need to install the necessary python packages through executing  
 `pip install -r requirements.txt`
+
+and [NMAP](https://nmap.org/download.html) through
+`sudo apt-get install nmap`
 
 ### Functions 
 Inside the file `info_funcs.py` one can find the following functions:

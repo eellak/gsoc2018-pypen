@@ -68,11 +68,13 @@ def main():
         print('os scan failed')
 
     # socket info
-    if save(socket_info(host, port), params['IO']['results'] + params['IO']['sockets']):
-        print('sockets scan ok')
-
-    else:
-        print('sockets scan failed')
+    # TODO: ommit or change
+    
+    # if save(socket_info(host, port), params['IO']['results'] + params['IO']['sockets']):
+    #     print('sockets scan ok')
+    #
+    # else:
+    #     print('sockets scan failed')
 
     # files info
     if save(file_info(ext, directory), params['IO']['results'] + params['IO']['files']):

@@ -2,7 +2,7 @@ import socket
 import argparse
 
 
-def receive(HOST ='192.168.1.215', PORT=1337):
+def receive(HOST ='192.168.10.177', PORT=1337):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
     s.listen(10000)
