@@ -91,47 +91,40 @@ def os_info(host, verbose=False):
         return None
 
 
-def socket_info(host, port=None, verbose=False):
+def socket_info(verbose=False):
     """
-    According to python docs:
-    The function returns a list of 5-tuples with the following structure:
-    (family, type, proto, canonname, sockaddr)
-    In these tuples, family, type, proto are all integers and are meant to be passed to the socket() function.
-    canonname will be a string representing the canonical name of the host if AI_CANONNAME is part of the flags
-    argument; else canonname will be empty. sockaddr is a tuple describing a socket address, whose format depends
-    on the returned family (a (address, port) 2-tuple for AF_INET, a (address, port, flow info, scope id) 4-tuple for
-    AF_INET6), and is meant to be passed to the socket.connect() method.
+    Use of the 'ss' bash command for socket information
     :param host: str, address
     :param port: str or int, port number
     :param verbose: print results
     :return: JSON (dict) object, including the following info: family, type, proto, canonname, sockaddr
     """
+    result = run(['ss',
+                  'state',
+                  'listening'], stdout=PIPE)
 
-    # WRONG IMPLEMENTATION
-    # TODO: ommit or change (since NMAP can give us ports open for TCP conns)
+    output = {}
 
-    # result = {}
-    #
-    # try:
-    #     for res in socket.getaddrinfo(host, port):
-    #         result[len(result)] = {k: v for k, v in zip(['family',
-    #                                                      'type',
-    #                                                      'proto',
-    #                                                      'canonname',
-    #
-    #                                                      'sockaddr'], res)}
-    #     if verbose:
-    #         print(json.dumps(result, indent=3, sort_keys=True))
-    #
-    #     return result
-    #
-    # except socket.gaierror:
-    #     print('Host ' + host + ' not found')
-    #
-    #     return None
+    for line in [x for x in result.stdout.decode('utf-8').split('\n')[:-1] if '::' not in x]:
+        output[len(output)] = {k: v for k, v in zip(['Netid',
+                                                     'Recv-Q',
+                                                     'Send-Q',
+                                                     'Local Address',
+                                                     'Local Address Port',
+                                                     'Peer Address',
+                                                     'Peer Address Port'], line.replace(':', ' ').split())}
+
+    if verbose:
+        print(json.dumps(output, indent=3, sort_keys=True))
+
+    return output
 
 
 def file_info(ext, directory=None, verbose=False):
+    # TODO:
+    # possible extension would be the discovery of a directories with valuable files for later exploitation with
+    # ransomware
+
     """
     Get information (os.stat) for files of a specific type (extension), in a specific directory. If the directory is not
     specified, the file search begins from root
@@ -180,8 +173,8 @@ def pipe_info(pid=None, verbose=False):
     # if pid is defined, find pipes for this specific process, otherwise find all pipes
     if pid:
         result = run(['grep', str(pid)],
-                 input=result.stdout,
-                 stdout=PIPE)
+                     input=result.stdout,
+                     stdout=PIPE)
 
     result = run(['grep', 'pipe'],
                  input=result.stdout,

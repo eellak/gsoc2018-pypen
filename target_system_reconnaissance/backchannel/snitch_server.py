@@ -2,7 +2,7 @@ import socket
 import argparse
 
 
-def receive(HOST ='192.168.10.177', PORT=1337):
+def receive(HOST=None, PORT=1337):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
     s.listen(10000)
@@ -36,6 +36,8 @@ if __name__ == '__main__':
 
     # port
     parser.add_argument('-port', help='Port')
+    # server
+    parser.add_argument('-server', help='Server')
 
     args = parser.parse_args()
 
@@ -43,6 +45,10 @@ if __name__ == '__main__':
         print('Define port')
         exit()
 
-    receive(PORT=int(args.port))
+    if not args.server:
+        print('Define server address')
+        exit()
+
+    receive(HOST=args.server, PORT=int(args.port))
 
     exit()

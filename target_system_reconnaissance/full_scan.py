@@ -83,14 +83,12 @@ def main():
     else:
         print('files scan failed')
 
-    # pipe info per process
-    print('Pipe information gathering started, this will take some time...')
-    if not os.path.exists(params['IO']['results'] + params['IO']['pipes_results']):
-        os.makedirs(params['IO']['results'] + params['IO']['pipes_results'])
+    # pipe info
+    if save(pipe_info(), params['IO']['pipes']):
+        print('pipes info ok')
 
-    for proc in processes.keys():
-        fname = params['IO']['pipes_results'] + 'process' + str(proc) + '.json'
-        save(pipe_info(proc, port), params['IO']['results'] + fname)
+    else:
+        print('pipes info failed')
 
 
 if __name__ == "__main__":

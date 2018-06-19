@@ -27,7 +27,7 @@ Calls the `nmap.PortScanner()` method with **-O** input argument to receive to O
 `sudo "$(which python)" myscript.py`
 
 * `socket_info(host, port=None, verbose=False)`  
-Calls the `socket.getaddrinfo()` method to scan a specific port (optional) of a specific host for information on sockets. Returns following info: family, type, proto, canonname, sockaddr in proper JSON format. `verbose` can be set to `True` if you want the results to be printed.
+Calls the `ss` command. Returns the following info: Netid, Recv-Q, Send-Q, Local Address, Local Address Port, Peer Address, Peer Address Port in proper JSON format. `verbose` can be set to `True` if you want the results to be printed.
 
 * `file_info(ext, directory=None, verbose=False)`  
 Calls the `os.stat()` method on files with the defined extenstion `ext`, found in the defined directory (if omitted, the search begins from the root directory) and returns the following info per file: 'st_mode', 'st_ino', 'st_dev', 'st_nlink', 'st_uid', 'st_gid', 'st_size', 'st_atime', 'st_mtime', 'st_ctime' in proper JSON format. `verbose` can be set to `True` if you want the results to be printed.
@@ -36,6 +36,10 @@ Calls the `os.stat()` method on files with the defined extenstion `ext`, found i
 Calls the `lsof` commands to find open pipes for a given process (if pid is defined, otherwise find all open pipes) and returns the following info: COMMAND, PID, USER, FD, TYPE, DEVICE, SIZE/OFF, NODE, NAME in proper JSON format. `verbose` can be set to `True` if you want the results to be printed.
 
 There's also the `full_scan.py` script, that runs almost all of the above. To use this, you'll either have to fill in *FIELDS* section in the `params.ini` file or you'll provide them via command prompt. For further info you can check the code.
+
+### Backchannel functionality
+Our assumption is that we already have access to a target system. That's why we have created the `snitch` exectuable, which runs the client part of our backchannel, executes the `full_scan.py` script and send the retrieved info to the server (attacker).
+The server must be running, by executing the `snitch_server.py` module (definition of *server* and *port* options is necessary)
 
 ### Disclaimer
 
