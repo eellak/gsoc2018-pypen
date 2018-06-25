@@ -38,7 +38,7 @@ Calls the `lsof` commands to find open pipes for a given process (if pid is defi
 There's also the `full_scan.py` script, that runs almost all of the above. To use this, you'll either have to fill in *FIELDS* section in the `params.ini` file or you'll provide them via command prompt. For further info you can check the code.
 
 ### Backchannel functionality
-Our assumption is that we already have access to a target system. That's why we have created the `snitch` exectuable, which runs the client part of our backchannel, executes the `full_scan.py` script and send the retrieved info to the server (attacker).
+Our assumption is that we already have access to a target system. That's why we have created the `snitch` exectuable (with the use of PyInstaller), which runs the client part of our backchannel, executes the `full_scan.py` script and send the retrieved info to the server (attacker).
 The server must be running, by executing the `snitch_server.py` module (definition of *server* and *port* options is necessary)
 
 ### Disclaimer
