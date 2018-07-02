@@ -4,6 +4,7 @@
 *.json
 *.log
 *.lst
+*.der
 *__pycache__
 !requirements.txt
 !test_targets.json
