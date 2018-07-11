@@ -1,5 +1,14 @@
+#!/usr/bin/env python3
 """
-This modules runs various information gathering functions for  a target system
+This modules runs various information gathering functions for a target system
+
+File name: full_scan.py
+Author: Konstantinos Christos Liosis
+Date created: 4/6/2018
+Python Version: 3.6.0
+
+Example execution:
+$python full_scan.py
 """
 
 import json

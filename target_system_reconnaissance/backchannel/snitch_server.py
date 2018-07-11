@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+"""
+This modules serves as the server part of our simple backchannel for target system information retrieval
+
+File name: snitch_server.py
+Author: Konstantinos Christos Liosis
+Date created: 13/6/2018
+Python Version: 3.6.0
+
+Example execution:
+$ python snitch_server.py -server 192.168.1.1 -port 1337
+"""
 import socket
 import argparse
 

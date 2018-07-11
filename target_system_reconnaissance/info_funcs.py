@@ -1,5 +1,11 @@
+#!/usr/bin/env python3
 """
 This module contains system information gathering functions
+
+File name: info_funcs.py
+Author: Konstantinos Christos Liosis
+Date created: 4/6/2018
+Python Version: 3.6.0
 """
 
 import psutil
