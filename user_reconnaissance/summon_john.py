@@ -1,6 +1,13 @@
+#!/usr/bin/env python3
 """
 This module is responsible for executing John The Ripper for password cracking
+
+File name: summon_john.py
+Author: Konstantinos Christos Liosis
+Date created: 23/5/2018
+Python Version: 3.6.0
 """
+
 import json
 import os
 from subprocess import run, PIPE

@@ -1,8 +1,18 @@
+#!/usr/bin/env python3
 """
 This module is the entry point to our user reconnaissance flow. It creates an instance of our Extractor class, logs in
 to Facebook, extracts & saves information for users in the target list (JSON file), generates a wordlist per user and
 then calls John The Ripper for password cracking
+
+File name: run.py
+Author: Konstantinos Christos Liosis
+Date created: 22/5/2018
+Python Version: 3.6.0
+
+Example execution:
+$python run.py -file my_targets.json -format raw-sha256 -rules CustomHeavy
 """
+
 import argparse
 import configparser
 

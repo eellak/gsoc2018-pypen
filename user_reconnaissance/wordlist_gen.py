@@ -1,8 +1,15 @@
+#!/usr/bin/env python3
 """
 This module is responsible for creating a input wordlist for our dictionary attacks with JtR. This is done by
 combining the words from particular word groups that have a good likelihood of forming a password (like "name"
 and "birthday"). Phrases are broken down to words, dates written in full are transformed to numeric form.
+
+File name: wordlist_gen.py
+Author: Konstantinos Christos Liosis
+Date created: 21/5/2018
+Python Version: 3.6.0
 """
+
 from itertools import combinations_with_replacement
 import json
 import configparser

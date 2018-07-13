@@ -1,6 +1,12 @@
+#!/usr/bin/env python3
 """
 This is the main information gathering module. By calling the send_request function, it will retrieve the HTML code of
 the results, it will send it to the parser and then it will store the data for this user in an appropriate structure.
+
+File name: info_extract.py
+Author: Konstantinos Christos Liosis
+Date created: 15/5/2018
+Python Version: 3.6.0
 """
 
 import requests

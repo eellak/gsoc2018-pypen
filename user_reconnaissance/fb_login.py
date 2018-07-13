@@ -1,7 +1,13 @@
+#!/usr/bin/env python3
 """
 This module is responsible for logging into Facebook so that we can use the authorization token (cookies) to later
 access our search results.
 Code partly borrowed & modified from https://gist.github.com/UndergroundLabs/fad38205068ffb904685
+
+File name: fb_login.py
+Author: Konstantinos Christos Liosis
+Date created: 15/5/2018
+Python Version: 3.6.0
 """
 
 import getpass

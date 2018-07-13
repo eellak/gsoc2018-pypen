@@ -1,6 +1,13 @@
+#!/usr/bin/env python3
 """
 This module is responsible for executing the requests for Facebook search or profile access
+
+File name: send_req.py
+Author: Konstantinos Christos Liosis
+Date created: 15/5/2018
+Python Version: 3.6.0
 """
+
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options

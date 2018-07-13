@@ -1,6 +1,12 @@
+#!/usr/bin/env python3
 """
 This module is responsible for parsing our fields of interest with BeautifulSoup, given the respective minified versions of their CSS
 class names and the HTML code, whether it's about profile fields or search results from Facebook
+
+File name: parser.py
+Author: Konstantinos Christos Liosis
+Date created: 15/5/2018
+Python Version: 3.6.0
 """
 
 from bs4 import BeautifulSoup
