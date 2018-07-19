@@ -32,11 +32,12 @@ def receive(HOST=None, PORT=1337):
             out_file = open(str(in_data.decode('utf-8')).split('.json')[0] + '.json', 'wb')
             in_data = bytearray(str(in_data.decode('utf-8')).split('.json')[1], encoding='utf-8')
 
-        while len(in_data):
-            print(str(in_data.decode('utf-8')))
-            out_file.write(in_data)
-            in_data = conn.recv(1024)
-        out_file.close()
+        if 'out_file' in vars():
+            while len(in_data):
+                print(str(in_data.decode('utf-8')))
+                out_file.write(in_data)
+                in_data = conn.recv(1024)
+            out_file.close()
 
     s.close()
 
