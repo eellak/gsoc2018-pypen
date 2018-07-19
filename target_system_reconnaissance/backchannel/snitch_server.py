@@ -54,12 +54,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not args.port:
-        print('Define port')
-        exit()
+        args.port = input('Define port: ')
 
     if not args.server:
-        print('Define server address')
-        exit()
+        args.server = input('Define server address: ')
 
     receive(HOST=args.server, PORT=int(args.port))
 
