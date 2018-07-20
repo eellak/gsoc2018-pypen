@@ -6,6 +6,10 @@ Penetration Testing library written in Python
 
 Development of a Python library for penetration testers. The library will include a set of tools for performing the basic tasks for attacking a remote host. It will include reconnaissance tools such as modules that will be able to collect data for a specific target either through the web or through user input. Moreover, other tools will be developed to create custom dictionaries for username and password attacks. Other attack techniques that will be supported include DoS attack, BruteForce attack as well as Inclusion attack. The library will also include various statistical functions for extracting additional information from a captured host.
 
+## Documentation
+
+See [Wiki](https://github.com/eellak/gsoc2018-pypen/wiki) tab
+
 ## Project plan
 
 See [Projects](https://github.com/eellak/gsoc2018-pypen/projects/1) tab
