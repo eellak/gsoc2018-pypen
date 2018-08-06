@@ -44,7 +44,7 @@ def port_state(host, port, verbose=False):
     port = str(port) if type(port) != str else port
 
     nmap_scan = nmap.PortScanner()
-
+import os
     try:
         nmap_scan.scan(host, port)
 
