@@ -1,6 +1,6 @@
 # Python PenTest Library - PyPen
 
-Penetration Testing library written in Python
+Penetration Testing library written in Python  
 A [GFOSS](https://summerofcode.withgoogle.com/organizations/4954936912117760/) project for the Google Summer of Code 2018 programme
 * [GSoC project link](https://summerofcode.withgoogle.com/projects/#5583642407993344) 
 
@@ -15,6 +15,7 @@ There's a detailed documentation section for each module of this project. It con
 * installation
 * usage
 * examples  
+
 See [Wiki](https://github.com/eellak/gsoc2018-pypen/wiki) tab
 
 ## Project plan
@@ -48,7 +49,7 @@ TODO
 
 [Open Technologies Alliance - GFOSS](https://gfoss.eu/)
 
-### Final Report (Gist)
+## Final Report (Gist)
 
 [gsoc18_pypen_report.md](https://gist.github.com/stikos/5228db0426a902e8833e7d73d67ec102)
 
