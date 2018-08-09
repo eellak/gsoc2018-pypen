@@ -1,6 +1,8 @@
 # Python PenTest Library - PyPen
 
 Penetration Testing library written in Python
+A [GFOSS](https://summerofcode.withgoogle.com/organizations/4954936912117760/) project for the Google Summer of Code 2018 programme
+* [GSoC project link](https://summerofcode.withgoogle.com/projects/#5583642407993344) 
 
 ## Description
 
@@ -8,13 +10,33 @@ Development of a Python library for penetration testers. The library will includ
 
 ## Documentation
 
+There's a detailed documentation section for each module of this project. It contains information regarding:  
+* requirements
+* installation
+* usage
+* examples  
 See [Wiki](https://github.com/eellak/gsoc2018-pypen/wiki) tab
 
 ## Project plan
 
 See [Projects](https://github.com/eellak/gsoc2018-pypen/projects/1) tab
 
+### Work Done
+
+This project consists of three main modules:  
+* [User Reconnaissance & Information Gathering](https://github.com/eellak/gsoc2018-pypen/tree/master/user_reconnaissance). This module's purpose is to gather information about Facebook users with public information on their profiles, and to create a collection of that information, which will be used in a dictionary attack.
+* [Target System Reconnaissance & Information Gathering](https://github.com/eellak/gsoc2018-pypen/tree/master/target_system_reconnaissance). A set of functions have been developed in order to get useful information for a target system such as open ports, OS info etc.
+* [Attack PenTest Tools](https://github.com/eellak/gsoc2018-pypen/tree/master/pentest_tools). A set of simple tools that try to take advantage of any information gathered with the use of our User Reconnaissance module and Target System Reconnaissance module, in order to succeed in some basic attack techniques.
+
+## Future Work
+
+TODO
+
 ## Contributors
+
+### Developer
+
+* Konstantinos Christos Liosis
 
 ### Mentors
 
@@ -22,9 +44,13 @@ See [Projects](https://github.com/eellak/gsoc2018-pypen/projects/1) tab
 * [Panagiotis Karampelas](https://www.linkedin.com/in/panagiotis-karampelas-5868002/)
 * [Christos Pavlatos](http://www.cslab.ece.ntua.gr/~pavlatos/)
 
-### Developer
+### Organization
 
-* Konstantinos Christos Liosis
+[Open Technologies Alliance - GFOSS](https://gfoss.eu/)
+
+### Final Report (Gist)
+
+[gsoc18_pypen_report.md](https://gist.github.com/stikos/5228db0426a902e8833e7d73d67ec102)
 
 ### Disclaimer
 
