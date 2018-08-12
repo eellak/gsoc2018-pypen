@@ -6,7 +6,7 @@ A [GFOSS](https://summerofcode.withgoogle.com/organizations/4954936912117760/) p
 
 ## Description
 
-Development of a Python library for penetration testers. The library will include a set of tools for performing the basic tasks for attacking a remote host. It will include reconnaissance tools such as modules that will be able to collect data for a specific target either through the web or through user input. Moreover, other tools will be developed to create custom dictionaries for username and password attacks. Other attack techniques that will be supported include DoS attack, BruteForce attack as well as Inclusion attack. The library will also include various statistical functions for extracting additional information from a captured host.
+Development of a Python library for penetration testers. The library will include a set of tools for performing the basic tasks for attacking a remote host. It will include reconnaissance tools such as modules that will be able to collect data for a specific target either through the web or through user input. Moreover, other tools will be developed to create custom dictionaries for username and password attacks. Other attack techniques that will be supported include DoS attack, and BruteForce attack. The library will also include various statistical functions for extracting additional information from a captured host.
 
 ## Documentation
 
@@ -31,7 +31,11 @@ This project consists of three main modules:
 
 ## Future Work
 
-TODO
+Possible additions or improvements to this project could be the following:  
+* An SSH bruteforce module (brutSSH.py), similar to bruftp.py
+* The improvement of pydos_scapy.py, as it is not very effective at the moment, plus the improvement of the simple socket implementation, in order for the script to be cross platfrom and not depend on hping3
+* An extension of the User Reconnaissance module so that it covers a wider variety of social networks, such as Instagram, Twitter, LinkedIn etc.
+* A distributed, online password cracking module, based on our User Reconnaissance data, that will possibly use spoofed IPs to ensure a large number of attempts.
 
 ## Contributors
 
